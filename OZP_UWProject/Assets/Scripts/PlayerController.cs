@@ -20,6 +20,7 @@ public class PlayerController : MonoBehaviour
     public float currentHealth;
     public HealthBar healthMeter;
     GameObject shadow;
+    Vector3 deathPoint;
 
     public bool inGhostMode = false;
     public float ghostCooldown = 4f;
@@ -70,9 +71,6 @@ public class PlayerController : MonoBehaviour
             else
             {
                 goGhostMode(0);
-                healthMeter.SetMaxHealth(100);
-                healthMeter.SetColor(1);
-                timer = 0;
             }
             
         }
@@ -80,9 +78,6 @@ public class PlayerController : MonoBehaviour
         if(healthMeter.getHealth() == 0)
         {
             goGhostMode(0);
-            healthMeter.SetMaxHealth(100);
-            healthMeter.SetColor(1);
-            timer = 0;
         }
 
         DoTheMovementThing();
@@ -136,6 +131,7 @@ public class PlayerController : MonoBehaviour
                 GetComponent<BoxCollider2D>().enabled = false;
                 
                 shadow.SetActive(false);
+                deathPoint = new Vector3(transform.position.x, transform.position.y + .1f, transform.position.z); ;
             }
         }
 
@@ -147,6 +143,10 @@ public class PlayerController : MonoBehaviour
             vfx.exitedGhostMode();
             GetComponent<BoxCollider2D>().enabled = true;
             shadow.SetActive(true);
+            healthMeter.SetMaxHealth(100);
+            healthMeter.SetColor(1);
+            timer = 0;
+            gameObject.transform.position = deathPoint;
         }
     }
 
