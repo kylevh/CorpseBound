@@ -42,30 +42,21 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        DoTheMovementThing();
+
 
         if (Input.GetKeyDown(KeyCode.Q)) //If death button pressed, do all this shit
         {
-            Debug.Log("Q was pressed");
             if (inGhostMode == false)
             {
-                GameObject explosion = (GameObject)Instantiate(explosionRef);
-                explosion.transform.position = new Vector3(transform.position.x, transform.position.y + .1f, transform.position.z);
-                inGhostMode = true;
-                switcheroo.switchCharacter(2); //switches to ghost
-                shakira.StartShake(10f, .3f);
-                vfx.enteredGhostMode();
+                goGhostMode(1);
             }
             else
             {
-                inGhostMode = false;
-                switcheroo.switchCharacter(1); //switches to main character
-                shakira.StartShake(2f, .1f);
-                vfx.exitedGhostMode();
+                goGhostMode(0);
             }
-
-
         }
+
+        DoTheMovementThing();
     }
 
     void FixedUpdate()
@@ -99,5 +90,29 @@ public class PlayerController : MonoBehaviour
     void CreateDustTrail()
     {
         dust.Play();
+    }
+
+    public void goGhostMode(int check) //if check ==1, go to ghost mode, if 0, exit ghost mode
+    {
+        if (check == 1) //enter ghost mode
+        {
+            if (inGhostMode == false)
+            {
+                GameObject explosion = (GameObject)Instantiate(explosionRef);
+                explosion.transform.position = new Vector3(transform.position.x, transform.position.y + .1f, transform.position.z);
+                inGhostMode = true;
+                switcheroo.switchCharacter(2); //switches to ghost
+                shakira.StartShake(10f, .3f);
+                vfx.enteredGhostMode();
+            }
+        }
+
+        if (check == 0)
+        {
+            inGhostMode = false;
+            switcheroo.switchCharacter(1); //switches to main character
+            shakira.StartShake(2f, .1f);
+            vfx.exitedGhostMode();
+        }
     }
 }
