@@ -10,19 +10,25 @@ public class PlayerController : MonoBehaviour
     public SpriteRenderer mainSprite;
     public SwitchCharacter switcheroo;  //On player holder
     public ScreenShakeController shakira; //On player holder
-    [SerializeField]
-    public PPVFX vfx; //On Post Processing Object
+    [SerializeField] public PPVFX vfx; //On Post Processing Object
+    Vector2 movement;
+    GameObject GameManager;
 
-    public bool inGhostMode = false;
 
     public float movementSpeed = 5f;
-    Vector2 movement;
-    public float ghostCooldown = 7f;
+    public float maxHealth = 100;
+    public float currentHealth;
+    public HealthBar healthMeter;
+    GameObject shadow;
+
+    public bool inGhostMode = false;
+    public float ghostCooldown = 4f;
 
     public ParticleSystem dust;
     private UnityEngine.Object explosionRef;
 
     public float timer;
+    public bool timing = false;
 
 
     void Start()
@@ -33,15 +39,24 @@ public class PlayerController : MonoBehaviour
         mainSprite = GetComponentInChildren<SpriteRenderer>();
         switcheroo = GetComponent<SwitchCharacter>();
         shakira = GetComponent<ScreenShakeController>();
+        currentHealth = maxHealth;
+        healthMeter.SetMaxHealth(maxHealth);
+        healthMeter.SetColor(1);
 
 
         #endregion
         explosionRef = Resources.Load("Explosion");
+        shadow = GameObject.Find("shadow");
 
     }
 
     void Update()
     {
+        if(timer > 0)
+        {
+            timer -= Time.deltaTime;
+            healthMeter.SetHealth(timer);
+        }
 
 
         if (Input.GetKeyDown(KeyCode.Q)) //If death button pressed, do all this shit
@@ -49,11 +64,25 @@ public class PlayerController : MonoBehaviour
             if (inGhostMode == false)
             {
                 goGhostMode(1);
+                countDownGhost();
             }
+
             else
             {
                 goGhostMode(0);
+                healthMeter.SetMaxHealth(100);
+                healthMeter.SetColor(1);
+                timer = 0;
             }
+            
+        }
+
+        if(healthMeter.getHealth() == 0)
+        {
+            goGhostMode(0);
+            healthMeter.SetMaxHealth(100);
+            healthMeter.SetColor(1);
+            timer = 0;
         }
 
         DoTheMovementThing();
@@ -104,6 +133,9 @@ public class PlayerController : MonoBehaviour
                 switcheroo.switchCharacter(2); //switches to ghost
                 shakira.StartShake(10f, .3f);
                 vfx.enteredGhostMode();
+                GetComponent<BoxCollider2D>().enabled = false;
+                
+                shadow.SetActive(false);
             }
         }
 
@@ -113,6 +145,24 @@ public class PlayerController : MonoBehaviour
             switcheroo.switchCharacter(1); //switches to main character
             shakira.StartShake(2f, .1f);
             vfx.exitedGhostMode();
+            GetComponent<BoxCollider2D>().enabled = true;
+            shadow.SetActive(true);
         }
     }
+
+    public void takeDamage(int DAMAGE)
+    {
+        currentHealth -= DAMAGE;
+        healthMeter.SetHealth(currentHealth);
+
+    }
+
+    public void countDownGhost()
+    {
+        healthMeter.SetMaxHealth(ghostCooldown);
+        healthMeter.SetColor(2);
+        timer = ghostCooldown;
+    }
+
+
 }

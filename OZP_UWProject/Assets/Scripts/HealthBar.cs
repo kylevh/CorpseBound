@@ -1,23 +1,36 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.UI;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class HealthBar : MonoBehaviour
 {
-    private Transform bar;
-    void Start()
+    public Slider healthFill;
+    public Color healthColor;
+    public Color ghostColor;
+
+    public void SetHealth(float health)
     {
-        bar = transform.Find("health");
+        healthFill.value = health;
     }
 
-    public void SetSize(float sizeNormalized)
+    public void SetMaxHealth(float health)
     {
-        bar.localScale = new Vector3(sizeNormalized, 1f);
+        healthFill.maxValue = health;
+        healthFill.value = health;
     }
 
-    public void SetColor (Color color)
+    public void SetColor(int select)
     {
-        bar.Find("Bar Sprite").GetComponent<Image>().color = color;
+        if (select == 1)
+            healthFill.fillRect.GetComponent<Image>().color = healthColor;
+        if(select == 2)
+            healthFill.fillRect.GetComponent<Image>().color = ghostColor;
+    }
+
+    public float getHealth()
+    {
+        return healthFill.value;
     }
 }

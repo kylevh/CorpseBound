@@ -42,7 +42,7 @@ public class PPVFX : MonoBehaviour  //Post-processing VFX script
     {
         if(check == true)
         {
-            ghostAbberation.intensity.value = 1f;
+            ghostAbberation.intensity.value = .5f;
         }
         else if (check == false)
         {
