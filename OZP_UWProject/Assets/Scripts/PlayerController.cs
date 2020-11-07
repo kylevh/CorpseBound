@@ -8,13 +8,16 @@ public class PlayerController : MonoBehaviour
     public Animator anim;
     public Rigidbody2D rb;
     public SpriteRenderer mainSprite;
-    public SwitchCharacter switcheroo;
-    public ScreenShakeController shakira;
+    public SwitchCharacter switcheroo;  //On player holder
+    public ScreenShakeController shakira; //On player holder
+    [SerializeField]
+    public PPVFX vfx; //On Post Processing Object
 
     public bool inGhostMode = false;
 
     public float movementSpeed = 5f;
     Vector2 movement;
+    public float ghostCooldown = 7f;
 
     public ParticleSystem dust;
     private UnityEngine.Object explosionRef;
@@ -30,10 +33,10 @@ public class PlayerController : MonoBehaviour
         mainSprite = GetComponentInChildren<SpriteRenderer>();
         switcheroo = GetComponent<SwitchCharacter>();
         shakira = GetComponent<ScreenShakeController>();
-        explosionRef = Resources.Load("Explosion");
+
 
         #endregion
-
+        explosionRef = Resources.Load("Explosion");
 
     }
 
@@ -41,7 +44,7 @@ public class PlayerController : MonoBehaviour
     {
         DoTheMovementThing();
 
-        if (Input.GetKeyDown(KeyCode.Q))
+        if (Input.GetKeyDown(KeyCode.Q)) //If death button pressed, do all this shit
         {
             Debug.Log("Q was pressed");
             if (inGhostMode == false)
@@ -50,13 +53,15 @@ public class PlayerController : MonoBehaviour
                 explosion.transform.position = new Vector3(transform.position.x, transform.position.y + .1f, transform.position.z);
                 inGhostMode = true;
                 switcheroo.switchCharacter(2); //switches to ghost
-                shakira.StartShake(4f, .3f);
+                shakira.StartShake(10f, .3f);
+                vfx.enteredGhostMode();
             }
             else
             {
                 inGhostMode = false;
                 switcheroo.switchCharacter(1); //switches to main character
                 shakira.StartShake(2f, .1f);
+                vfx.exitedGhostMode();
             }
 
 
