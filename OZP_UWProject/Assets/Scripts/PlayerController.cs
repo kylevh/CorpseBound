@@ -20,12 +20,14 @@ public class PlayerController : MonoBehaviour
     public float currentHealth;
     public HealthBar healthMeter;
     GameObject shadow;
+    Vector3 deathPoint;
 
     public bool inGhostMode = false;
     public float ghostCooldown = 4f;
 
     public ParticleSystem dust;
     private UnityEngine.Object explosionRef;
+    private UnityEngine.Object corpseBody;
 
     public float timer;
     public bool timing = false;
@@ -46,6 +48,7 @@ public class PlayerController : MonoBehaviour
 
         #endregion
         explosionRef = Resources.Load("Explosion");
+        corpseBody = Resources.Load("corpse");
         shadow = GameObject.Find("shadow");
 
     }
@@ -70,9 +73,6 @@ public class PlayerController : MonoBehaviour
             else
             {
                 goGhostMode(0);
-                healthMeter.SetMaxHealth(100);
-                healthMeter.SetColor(1);
-                timer = 0;
             }
             
         }
@@ -80,9 +80,6 @@ public class PlayerController : MonoBehaviour
         if(healthMeter.getHealth() == 0)
         {
             goGhostMode(0);
-            healthMeter.SetMaxHealth(100);
-            healthMeter.SetColor(1);
-            timer = 0;
         }
 
         DoTheMovementThing();
@@ -128,7 +125,9 @@ public class PlayerController : MonoBehaviour
             if (inGhostMode == false)
             {
                 GameObject explosion = (GameObject)Instantiate(explosionRef);
+                GameObject corpse = (GameObject)Instantiate(corpseBody);
                 explosion.transform.position = new Vector3(transform.position.x, transform.position.y + .1f, transform.position.z);
+                corpse.transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z);
                 inGhostMode = true;
                 switcheroo.switchCharacter(2); //switches to ghost
                 shakira.StartShake(10f, .3f);
@@ -136,6 +135,7 @@ public class PlayerController : MonoBehaviour
                 GetComponent<BoxCollider2D>().enabled = false;
                 
                 shadow.SetActive(false);
+                deathPoint = new Vector3(transform.position.x, transform.position.y + .1f, transform.position.z); ;
             }
         }
 
@@ -147,6 +147,12 @@ public class PlayerController : MonoBehaviour
             vfx.exitedGhostMode();
             GetComponent<BoxCollider2D>().enabled = true;
             shadow.SetActive(true);
+            healthMeter.SetMaxHealth(100);
+            healthMeter.SetColor(1);
+            timer = 0;
+            gameObject.transform.position = deathPoint;
+            Destroy(GameObject.FindGameObjectWithTag("dead"));
+            
         }
     }
 
