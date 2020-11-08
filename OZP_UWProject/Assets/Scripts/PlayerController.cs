@@ -27,6 +27,7 @@ public class PlayerController : MonoBehaviour
 
     public ParticleSystem dust;
     private UnityEngine.Object explosionRef;
+    private UnityEngine.Object corpseBody;
 
     public float timer;
     public bool timing = false;
@@ -47,6 +48,7 @@ public class PlayerController : MonoBehaviour
 
         #endregion
         explosionRef = Resources.Load("Explosion");
+        corpseBody = Resources.Load("corpse");
         shadow = GameObject.Find("shadow");
 
     }
@@ -123,7 +125,9 @@ public class PlayerController : MonoBehaviour
             if (inGhostMode == false)
             {
                 GameObject explosion = (GameObject)Instantiate(explosionRef);
+                GameObject corpse = (GameObject)Instantiate(corpseBody);
                 explosion.transform.position = new Vector3(transform.position.x, transform.position.y + .1f, transform.position.z);
+                corpse.transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z);
                 inGhostMode = true;
                 switcheroo.switchCharacter(2); //switches to ghost
                 shakira.StartShake(10f, .3f);
@@ -147,6 +151,8 @@ public class PlayerController : MonoBehaviour
             healthMeter.SetColor(1);
             timer = 0;
             gameObject.transform.position = deathPoint;
+            Destroy(GameObject.FindGameObjectWithTag("dead"));
+            
         }
     }
 
