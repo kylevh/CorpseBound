@@ -21,12 +21,50 @@ namespace DialogueSystem
         [Header("Sound")]
         [SerializeField] private AudioClip sound;
 
+        [Header("Character Image")]
+        [SerializeField] private Sprite characterSprite;
+        [SerializeField] private Image imageHolder;
+
+        private IEnumerator lineAppear;
+
         private void Awake()
         {
-            textHolder = GetComponent<Text>();
+            ResetLine();
 
-            StartCoroutine(WriteText(input, textHolder, textColor, textFont, delay, sound));
+            imageHolder.sprite = characterSprite;
+            imageHolder.preserveAspect = true;
         }
+
+        private void OnEnable()
+        {
+            ResetLine();
+            lineAppear = WriteText(input, textHolder, textColor, textFont, delay, sound);
+            StartCoroutine(lineAppear);
+        }
+
+        private void Update()
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                if (textHolder.text != input)
+                {
+                    StopCoroutine(lineAppear);
+                    textHolder.text = input;
+                }
+                else
+                    finished = true;
+            }
+        }
+
+        private void ResetLine()
+        {
+            textHolder = GetComponent<Text>();
+            textHolder.text = "";
+            finished = false;
+        }
+
+
+
 
     }
 }

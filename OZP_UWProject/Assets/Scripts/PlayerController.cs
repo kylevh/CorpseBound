@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+
     public Animator anim;
     public Rigidbody2D rb;
     public SpriteRenderer mainSprite;
@@ -12,9 +13,10 @@ public class PlayerController : MonoBehaviour
     public ScreenShakeController shakira; //On player holder
     [SerializeField] public PPVFX vfx; //On Post Processing Object
     Vector2 movement;
+    private NPC_Controller npc;
     GameObject GameManager;
 
-
+    [Header("Player Settings")]
     public float movementSpeed = 5f;
     public float maxHealth = 100;
     public float currentHealth;
@@ -25,12 +27,14 @@ public class PlayerController : MonoBehaviour
     public bool inGhostMode = false;
     public float ghostCooldown = 4f;
 
+    //Objects and sound
     public ParticleSystem dust;
     private UnityEngine.Object explosionRef;
     private UnityEngine.Object corpseBody;
 
     public float timer;
     public bool timing = false;
+    
 
 
     void Start()
@@ -61,7 +65,6 @@ public class PlayerController : MonoBehaviour
             healthMeter.SetHealth(timer);
         }
 
-
         if (Input.GetKeyDown(KeyCode.Q)) //If death button pressed, do all this shit
         {
             if (inGhostMode == false)
@@ -69,12 +72,10 @@ public class PlayerController : MonoBehaviour
                 goGhostMode(1);
                 countDownGhost();
             }
-
             else
             {
                 goGhostMode(0);
-            }
-            
+            }     
         }
 
         if(healthMeter.getHealth() == 0)
@@ -92,23 +93,34 @@ public class PlayerController : MonoBehaviour
 
     void DoTheMovementThing() //does the movement thing
     {
-        //Input
-        if (Mathf.Abs(movement.y) >= .6f && Mathf.Abs(movement.x) >= .6f) //Clips movement diagonally
+        if (!inDialogue())
         {
-            movement.x = Input.GetAxisRaw("Horizontal") * .6f;
-            movement.y = Input.GetAxisRaw("Vertical") * .6f;
+
+            //Input
+            if (Mathf.Abs(movement.y) >= .6f && Mathf.Abs(movement.x) >= .6f) //Clips movement diagonally
+            {
+                movement.x = Input.GetAxisRaw("Horizontal") * .6f;
+                movement.y = Input.GetAxisRaw("Vertical") * .6f;
+            }
+            else
+            {
+                movement.x = Input.GetAxisRaw("Horizontal");
+                movement.y = Input.GetAxisRaw("Vertical");
+            }
+            anim.SetFloat("Horizontal", movement.x);
+            anim.SetFloat("Vertical", movement.y);
+            anim.SetFloat("Magnitude", movement.magnitude);
+
+            //CreateDustTrail();
         }
-        else
+        else if (inDialogue())
         {
-            movement.x = Input.GetAxisRaw("Horizontal");
-            movement.y = Input.GetAxisRaw("Vertical");
+            movement.x = 0;
+            movement.y = 0;
+            anim.SetFloat("Horizontal", movement.x);
+            anim.SetFloat("Vertical", movement.y);
+            anim.SetFloat("Magnitude", movement.magnitude);
         }
-        anim.SetFloat("Horizontal", movement.x);
-        anim.SetFloat("Vertical", movement.y);
-        anim.SetFloat("Magnitude", movement.magnitude);
-
-        CreateDustTrail();
-
 
     }
 
@@ -156,6 +168,35 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private bool inDialogue()
+    {
+        if (npc != null)
+            return npc.DialogueActive();
+        else
+            return false;
+    }
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if(collision.gameObject.tag == "NPC")
+        {
+            npc = collision.gameObject.GetComponent<NPC_Controller>();
+
+            if (Input.GetKey(KeyCode.F))
+                npc.ActivateDialogue();
+        }
+
+        if(collision.gameObject.tag == "Fratboy")
+        {
+
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        npc = null;
+    }
+
     public void takeDamage(int DAMAGE)
     {
         currentHealth -= DAMAGE;
@@ -168,6 +209,20 @@ public class PlayerController : MonoBehaviour
         healthMeter.SetMaxHealth(ghostCooldown);
         healthMeter.SetColor(2);
         timer = ghostCooldown;
+    }
+
+    public IEnumerator Knockback(float knockbackDuration, float power, Transform obj)
+    {
+        float kbTimer = 0;
+
+        while(knockbackDuration > timer)
+        {
+            timer += Time.deltaTime;
+            Vector2 direction = (obj.transform.position - this.transform.position).normalized;
+            rb.AddForce(-direction * power);
+        }
+
+        yield return 0;
     }
 
 

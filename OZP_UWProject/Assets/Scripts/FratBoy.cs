@@ -7,7 +7,7 @@ using UnityEngine.Tilemaps;
 
 public class FratBoy : MonoBehaviour
 {
-    [SerializeField] private Animator anim;
+    private Animator anim;
     [SerializeField] private List<GameObject> Waypoints;
     private static Tilemap tilemap;
     private AIPath aiPath;
@@ -17,13 +17,14 @@ public class FratBoy : MonoBehaviour
     private static readonly int X = Animator.StringToHash("X");
     private static readonly int Y = Animator.StringToHash("Y");
     [SerializeField] private int index;
-    [SerializeField] private float moveSpeed = 0.05f;
+    [SerializeField] public float moveSpeed = 0.05f;
 
     private bool attacking = false;
 
     // Start is called before the first frame update
     void Start()
     {
+        anim = GetComponent<Animator>();
         //rb2d = GetComponent<Rigidbody2D>();
         aiPath = GetComponent<AIPath>();
         _aiDestinationSetter = GetComponent<AIDestinationSetter>();
@@ -39,6 +40,7 @@ public class FratBoy : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other)
     {
         _aiDestinationSetter.target = other.gameObject.transform;
+        
     }
 
     private void OnTriggerExit2D(Collider2D other)
