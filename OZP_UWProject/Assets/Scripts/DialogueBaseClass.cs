@@ -22,7 +22,7 @@ namespace DialogueSystem
 
             }
 
-            yield return new WaitUntil(() => Input.GetMouseButton(0));
+            yield return new WaitUntil(() => Input.GetMouseButtonDown(0));
 
             finished = true;
         }

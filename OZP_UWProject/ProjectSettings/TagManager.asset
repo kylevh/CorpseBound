@@ -6,6 +6,7 @@ TagManager:
   tags:
   - dead
   - NPC
+  - Fratboy
   layers:
   - Default
   - TransparentFX

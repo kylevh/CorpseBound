@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour
     public ScreenShakeController shakira; //On player holder
     [SerializeField] public PPVFX vfx; //On Post Processing Object
     Vector2 movement;
+    private NPC_Controller npc;
     GameObject GameManager;
 
     [Header("Player Settings")]
@@ -26,13 +27,14 @@ public class PlayerController : MonoBehaviour
     public bool inGhostMode = false;
     public float ghostCooldown = 4f;
 
+    //Objects and sound
     public ParticleSystem dust;
     private UnityEngine.Object explosionRef;
     private UnityEngine.Object corpseBody;
 
     public float timer;
     public bool timing = false;
-    private NPC_Controller npc;
+    
 
 
     void Start()
@@ -63,7 +65,6 @@ public class PlayerController : MonoBehaviour
             healthMeter.SetHealth(timer);
         }
 
-
         if (Input.GetKeyDown(KeyCode.Q)) //If death button pressed, do all this shit
         {
             if (inGhostMode == false)
@@ -71,12 +72,10 @@ public class PlayerController : MonoBehaviour
                 goGhostMode(1);
                 countDownGhost();
             }
-
             else
             {
                 goGhostMode(0);
-            }
-            
+            }     
         }
 
         if(healthMeter.getHealth() == 0)
@@ -113,6 +112,14 @@ public class PlayerController : MonoBehaviour
             anim.SetFloat("Magnitude", movement.magnitude);
 
             //CreateDustTrail();
+        }
+        else if (inDialogue())
+        {
+            movement.x = 0;
+            movement.y = 0;
+            anim.SetFloat("Horizontal", movement.x);
+            anim.SetFloat("Vertical", movement.y);
+            anim.SetFloat("Magnitude", movement.magnitude);
         }
 
     }
@@ -178,6 +185,11 @@ public class PlayerController : MonoBehaviour
             if (Input.GetKey(KeyCode.F))
                 npc.ActivateDialogue();
         }
+
+        if(collision.gameObject.tag == "Fratboy")
+        {
+
+        }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
@@ -197,6 +209,20 @@ public class PlayerController : MonoBehaviour
         healthMeter.SetMaxHealth(ghostCooldown);
         healthMeter.SetColor(2);
         timer = ghostCooldown;
+    }
+
+    public IEnumerator Knockback(float knockbackDuration, float power, Transform obj)
+    {
+        float kbTimer = 0;
+
+        while(knockbackDuration > timer)
+        {
+            timer += Time.deltaTime;
+            Vector2 direction = (obj.transform.position - this.transform.position).normalized;
+            rb.AddForce(-direction * power);
+        }
+
+        yield return 0;
     }
 
 
