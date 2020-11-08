@@ -7,6 +7,7 @@ using UnityEngine.Tilemaps;
 
 public class FratBoy : MonoBehaviour
 {
+    #region Mumbo jumbo
     private Animator anim;
     [SerializeField] private List<GameObject> Waypoints;
     private static Tilemap tilemap;
@@ -16,12 +17,14 @@ public class FratBoy : MonoBehaviour
     private static readonly int Speed = Animator.StringToHash("Speed");
     private static readonly int X = Animator.StringToHash("X");
     private static readonly int Y = Animator.StringToHash("Y");
+    #endregion
+
     [SerializeField] private int index;
-    [SerializeField] public float moveSpeed =1f;
+    [SerializeField] public float moveSpeed = 1f;
+    public float Timer { get; set; }
+    private float damageDelay = 0;
 
-    private bool attacking = false;
 
-    // Start is called before the first frame update
     void Start()
     {
         anim = GetComponent<Animator>();
@@ -41,7 +44,6 @@ public class FratBoy : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other)
     {
         _aiDestinationSetter.target = other.gameObject.transform;
-        
     }
 
     private void OnTriggerExit2D(Collider2D other)
@@ -49,9 +51,24 @@ public class FratBoy : MonoBehaviour
         _aiDestinationSetter.target = Waypoints[index].transform;
     }
 
-    // Update is called once per frame
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        
+    }
+
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        if (damageDelay <= 0)
+        {
+            collision.gameObject.GetComponent<PlayerController>().takeDamage(30);
+            damageDelay = .5f;
+        }
+    }
+
     void Update()
     {
+        damageDelay -= Time.deltaTime;
+
         if (((transform.position - Waypoints[index].transform.position).sqrMagnitude <
              1.0f))
         {
@@ -67,5 +84,4 @@ public class FratBoy : MonoBehaviour
         anim.SetFloat(Y, aiPath.desiredVelocity.y);
     }
 
-    public float Timer { get; set; }
 }

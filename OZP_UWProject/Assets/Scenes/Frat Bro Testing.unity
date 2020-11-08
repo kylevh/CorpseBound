@@ -13303,7 +13303,7 @@ MonoBehaviour:
   - {fileID: 63768246}
   - {fileID: 2032764149}
   index: 0
-  moveSpeed: 50
+  moveSpeed: 10
 --- !u!212 &282591671
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -13514,6 +13514,7 @@ MonoBehaviour:
   healthFill: {fileID: 292346338}
   healthColor: {r: 0.8396226, g: 0.122774996, b: 0.122774996, a: 1}
   ghostColor: {r: 0, g: 1, b: 0.9413092, a: 1}
+  white: {r: 0, g: 0, b: 0, a: 0}
 --- !u!1 &338466823
 GameObject:
   m_ObjectHideFlags: 0
@@ -26197,9 +26198,12 @@ MonoBehaviour:
   healthMeter: {fileID: 292346339}
   inGhostMode: 0
   ghostCooldown: 7
+  disableMovement: 0
   dust: {fileID: 1995036908547607844, guid: 7e95ae3056684184592949f36a3b068b, type: 3}
   timer: 0
   timing: 0
+  clock: 0
+  isWhite: 0
 --- !u!4 &2092974349
 Transform:
   m_ObjectHideFlags: 0

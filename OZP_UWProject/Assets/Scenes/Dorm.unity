@@ -1983,6 +1983,7 @@ MonoBehaviour:
   healthFill: {fileID: 292346338}
   healthColor: {r: 0.8396226, g: 0.122774996, b: 0.122774996, a: 1}
   ghostColor: {r: 0, g: 1, b: 0.9413092, a: 1}
+  white: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &334241762
 GameObject:
   m_ObjectHideFlags: 0
@@ -3664,7 +3665,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 700700395}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalPosition: {x: -13.349976, y: 0, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2093029444}
@@ -3975,8 +3976,16 @@ PrefabInstance:
       value: Fratboy
       objectReference: {fileID: 0}
     - target: {fileID: 1632096545779076213, guid: ad4a94feda6f12a4aa50d3a03e2c5aca, type: 3}
+      propertyPath: thrust
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1632096545779076213, guid: ad4a94feda6f12a4aa50d3a03e2c5aca, type: 3}
+      propertyPath: knockTime
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1632096545779076213, guid: ad4a94feda6f12a4aa50d3a03e2c5aca, type: 3}
       propertyPath: moveSpeed
-      value: 50
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 1632096545779076213, guid: ad4a94feda6f12a4aa50d3a03e2c5aca, type: 3}
       propertyPath: Waypoints.Array.data[0]
@@ -3994,6 +4003,22 @@ PrefabInstance:
       propertyPath: Waypoints.Array.data[3]
       value: 
       objectReference: {fileID: 403444238}
+    - target: {fileID: 1632096545779076218, guid: ad4a94feda6f12a4aa50d3a03e2c5aca, type: 3}
+      propertyPath: m_Size.x
+      value: 1.2964182
+      objectReference: {fileID: 0}
+    - target: {fileID: 1632096545779076218, guid: ad4a94feda6f12a4aa50d3a03e2c5aca, type: 3}
+      propertyPath: m_Size.y
+      value: 2.202374
+      objectReference: {fileID: 0}
+    - target: {fileID: 1632096545779076218, guid: ad4a94feda6f12a4aa50d3a03e2c5aca, type: 3}
+      propertyPath: m_Offset.x
+      value: 0.0074181557
+      objectReference: {fileID: 0}
+    - target: {fileID: 1632096545779076218, guid: ad4a94feda6f12a4aa50d3a03e2c5aca, type: 3}
+      propertyPath: m_Offset.y
+      value: 0.7273381
+      objectReference: {fileID: 0}
     - target: {fileID: 1632096545779076219, guid: ad4a94feda6f12a4aa50d3a03e2c5aca, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -6423,7 +6448,7 @@ GameObject:
   - component: {fileID: 2092974350}
   m_Layer: 0
   m_Name: Player Holder
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6499,9 +6524,12 @@ MonoBehaviour:
   healthMeter: {fileID: 292346339}
   inGhostMode: 0
   ghostCooldown: 7
+  disableMovement: 0
   dust: {fileID: 1995036908547607844, guid: 7e95ae3056684184592949f36a3b068b, type: 3}
   timer: 0
   timing: 0
+  clock: 0
+  isWhite: 0
 --- !u!4 &2092974349
 Transform:
   m_ObjectHideFlags: 0
@@ -6510,7 +6538,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2092974345}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -13.35, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 51255670}

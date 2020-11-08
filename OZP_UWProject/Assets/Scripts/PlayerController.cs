@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-
+    public static PlayerController instance;
     public Animator anim;
     public Rigidbody2D rb;
     public SpriteRenderer mainSprite;
@@ -26,6 +26,7 @@ public class PlayerController : MonoBehaviour
 
     public bool inGhostMode = false;
     public float ghostCooldown = 4f;
+    public bool disableMovement = false;
 
     //Objects and sound
     public ParticleSystem dust;
@@ -34,8 +35,13 @@ public class PlayerController : MonoBehaviour
 
     public float timer;
     public bool timing = false;
-    
+    public float clock;
+    public bool isWhite = false;
 
+    private void Awake()
+    {
+        instance = this;
+    }
 
     void Start()
     {
@@ -45,7 +51,6 @@ public class PlayerController : MonoBehaviour
         mainSprite = GetComponentInChildren<SpriteRenderer>();
         switcheroo = GetComponent<SwitchCharacter>();
         shakira = GetComponent<ScreenShakeController>();
-        currentHealth = maxHealth;
         healthMeter.SetMaxHealth(maxHealth);
         healthMeter.SetColor(1);
 
@@ -59,7 +64,8 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        if(timer > 0)
+
+        if (timer > 0)
         {
             timer -= Time.deltaTime;
             healthMeter.SetHealth(timer);
@@ -78,12 +84,18 @@ public class PlayerController : MonoBehaviour
             }     
         }
 
-        if(healthMeter.getHealth() == 0)
+        if (healthMeter.getHealth() == 0 && inGhostMode == true)
         {
             goGhostMode(0);
         }
+        else if (healthMeter.getHealth() == 0 && inGhostMode == false)
+        {
+            goGhostMode(1);
+            countDownGhost();
+        }
 
         DoTheMovementThing();
+        healthBarUpdate();
     }
 
     void FixedUpdate()
@@ -95,6 +107,8 @@ public class PlayerController : MonoBehaviour
     {
         if (!inDialogue())
         {
+            if(disableMovement == false)
+               
 
             //Input
             if (Mathf.Abs(movement.y) >= .6f && Mathf.Abs(movement.x) >= .6f) //Clips movement diagonally
@@ -160,6 +174,7 @@ public class PlayerController : MonoBehaviour
             GetComponent<BoxCollider2D>().enabled = true;
             shadow.SetActive(true);
             healthMeter.SetMaxHealth(100);
+            healthMeter.SetHealth(100);
             healthMeter.SetColor(1);
             timer = 0;
             gameObject.transform.position = deathPoint;
@@ -215,9 +230,9 @@ public class PlayerController : MonoBehaviour
     {
         float kbTimer = 0;
 
-        while(knockbackDuration > timer)
+        while(knockbackDuration > kbTimer)
         {
-            timer += Time.deltaTime;
+            kbTimer += Time.deltaTime;
             Vector2 direction = (obj.transform.position - this.transform.position).normalized;
             rb.AddForce(-direction * power);
         }
@@ -225,5 +240,64 @@ public class PlayerController : MonoBehaviour
         yield return 0;
     }
 
+    public IEnumerator countDown(float waitSeconds)
+    {
+
+        yield return new WaitForSeconds(waitSeconds);
+    }
+
+    public void healthBarUpdate()
+    {
+
+        clock += Time.deltaTime;
+        currentHealth = healthMeter.getHealth();
+        if (inGhostMode == false)
+        {
+            if (currentHealth < 30)
+            {
+                if (clock > .1f)
+                {
+                    if (isWhite == true)
+                    {
+                        isWhite = false;
+                        healthMeter.SetColor(1);
+                        clock = 0;
+
+                    }
+                    else if (isWhite == false)
+                    {
+                        isWhite = true;
+                        healthMeter.SetColor(3);
+                        clock = 0;
+                    }
+                }
+
+            }
+        }
+
+        else if (inGhostMode == true)
+        {
+            if (currentHealth < 2)
+            {
+                if (clock > .07f)
+                {
+                    if (isWhite == true)
+                    {
+                        isWhite = false;
+                        healthMeter.SetColor(2);
+                        clock = 0;
+
+                    }
+                    else if (isWhite == false)
+                    {
+                        isWhite = true;
+                        healthMeter.SetColor(3);
+                        clock = 0;
+                    }
+                }
+
+            }
+        }
+    }
 
 }
