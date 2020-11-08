@@ -201,10 +201,10 @@ public class PlayerController : MonoBehaviour
                 npc.ActivateDialogue();
         }
 
-        if(collision.gameObject.tag == "Fratboy")
+        /*if(collision.gameObject.tag == "Fratboy")
         {
-
-        }
+            StartCoroutine(Knockback(2, 5, collision.transform));
+        }*/
     }
 
     private void OnTriggerExit2D(Collider2D collision)

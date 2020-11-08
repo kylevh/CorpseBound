@@ -81,7 +81,7 @@ public class FratBoy : MonoBehaviour
             aiPath.desiredVelocity.sqrMagnitude);
         //Debug.Log(rb2d.velocity.sqrMagnitude);
         anim.SetFloat(X, aiPath.desiredVelocity.x);
-        anim.SetFloat(Y, aiPath.desiredVelocity.y);
+        anim.SetFloat(Y, aiPath.desiredVelocity.y );
     }
 
 }
