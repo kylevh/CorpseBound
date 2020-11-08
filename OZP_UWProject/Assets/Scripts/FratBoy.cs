@@ -17,7 +17,7 @@ public class FratBoy : MonoBehaviour
     private static readonly int X = Animator.StringToHash("X");
     private static readonly int Y = Animator.StringToHash("Y");
     [SerializeField] private int index;
-    [SerializeField] public float moveSpeed = 0.05f;
+    [SerializeField] public float moveSpeed =1f;
 
     private bool attacking = false;
 
@@ -33,6 +33,7 @@ public class FratBoy : MonoBehaviour
             tilemap = GameObject.FindObjectOfType<Tilemap>();
         }
         _aiDestinationSetter.target = Waypoints[index].transform;
+        aiPath.maxSpeed = moveSpeed;
         transform.position =
             tilemap.AlignToGrid(transform.position) + new Vector3(0, 0, -0.01f);
     }
