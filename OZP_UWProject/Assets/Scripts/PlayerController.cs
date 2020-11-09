@@ -113,25 +113,41 @@ public class PlayerController : MonoBehaviour
     {
         if (!inDialogue())
         {
-            if(disableMovement == false)
-               
 
-            //Input
-            if (Mathf.Abs(movement.y) >= .6f && Mathf.Abs(movement.x) >= .6f) //Clips movement diagonally
+            if (Input.GetKey(KeyCode.LeftShift))
             {
-                movement.x = Input.GetAxisRaw("Horizontal") * .75f;
-                movement.y = Input.GetAxisRaw("Vertical") * .75f;
+                if (Mathf.Abs(movement.y) >= 1.1f && Mathf.Abs(movement.x) >= 1.1f) //Clips movement diagonally
+                {
+                    movement.x = Input.GetAxisRaw("Horizontal") * 1.2f;
+                    movement.y = Input.GetAxisRaw("Vertical") * 1.2f;
+                }
+                else
+                {
+                    movement.x = Input.GetAxisRaw("Horizontal") * 1.8f;
+                    movement.y = Input.GetAxisRaw("Vertical") * 1.8f;
+                }
+                anim.SetFloat("Horizontal", movement.x);
+                anim.SetFloat("Vertical", movement.y);
+                anim.SetFloat("Magnitude", movement.magnitude);
+                CreateDustTrail();
             }
             else
             {
-                movement.x = Input.GetAxisRaw("Horizontal");
-                movement.y = Input.GetAxisRaw("Vertical");
+                if (Mathf.Abs(movement.y) >= .6f && Mathf.Abs(movement.x) >= .6f) //Clips movement diagonally
+                {
+                    movement.x = Input.GetAxisRaw("Horizontal") * .75f;
+                    movement.y = Input.GetAxisRaw("Vertical") * .75f;
+                }
+                else
+                {
+                    movement.x = Input.GetAxisRaw("Horizontal");
+                    movement.y = Input.GetAxisRaw("Vertical");
+                }
+                anim.SetFloat("Horizontal", movement.x);
+                anim.SetFloat("Vertical", movement.y);
+                anim.SetFloat("Magnitude", movement.magnitude);
             }
-            anim.SetFloat("Horizontal", movement.x);
-            anim.SetFloat("Vertical", movement.y);
-            anim.SetFloat("Magnitude", movement.magnitude);
 
-            //CreateDustTrail();
         }
         else if (inDialogue())
         {
