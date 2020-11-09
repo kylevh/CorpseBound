@@ -9487,7 +9487,7 @@ CompositeCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   m_GeometryType: 0
-  m_GenerationType: 1
+  m_GenerationType: 0
   m_EdgeRadius: 0
   m_ColliderPaths:
   - m_Collider: {fileID: 3536732627743824960}
@@ -9718,14 +9718,46 @@ CompositeCollider2D:
         Y: -295000000
       - X: 733750016
         Y: -295000000
-    - - X: 560000000
-        Y: -100000000
-      - X: 560000000
+    - - X: 559999959
+        Y: -100000100
+      - X: 559999900
+        Y: -100000041
+      - X: 559999900
+        Y: -89999959
+      - X: 559999959
+        Y: -89999900
+      - X: 590000041
+        Y: -89999900
+      - X: 590000100
+        Y: -89999959
+      - X: 590000100
         Y: -90000000
-      - X: 730000000
+      - X: 609999900
         Y: -90000000
-      - X: 730000000
+      - X: 609999900
+        Y: -89999959
+      - X: 609999959
+        Y: -89999900
+      - X: 730000041
+        Y: -89999900
+      - X: 730000100
+        Y: -89999959
+      - X: 730000100
+        Y: -100000041
+      - X: 730000041
+        Y: -100000100
+      - X: 609999959
+        Y: -100000100
+      - X: 609999900
+        Y: -100000041
+      - X: 609999900
         Y: -100000000
+      - X: 590000100
+        Y: -100000000
+      - X: 590000100
+        Y: -100000041
+      - X: 590000041
+        Y: -100000100
     - - X: -120000000
         Y: -190000000
       - X: -220000000
@@ -10185,10 +10217,10 @@ CompositeCollider2D:
       - {x: 55.5, y: -8.625011}
       - {x: 55.500008, y: -29.375008}
       - {x: 55.62501, y: -29.5}
-    - - {x: 73, y: -9.99997}
-      - {x: 56, y: -9.99997}
-      - {x: 56.000034, y: -9}
-      - {x: 73, y: -9.00003}
+    - - {x: 73.000015, y: -9.999974}
+      - {x: 55.99999, y: -9.999974}
+      - {x: 56.000027, y: -8.99999}
+      - {x: 73.000015, y: -9.000026}
     - - {x: -12.00003, y: -19.5}
       - {x: -12.00003, y: -19}
       - {x: -22, y: -18.999971}
@@ -24632,7 +24664,7 @@ GameObject:
   - component: {fileID: 3536732629063104891}
   - component: {fileID: 3536732629063104890}
   m_Layer: 0
-  m_Name: _rid
+  m_Name: Grid
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -24678,7 +24710,6 @@ GameObject:
   - component: {fileID: 1220847649517457434}
   - component: {fileID: 7120056823894159534}
   - component: {fileID: 720753753131964598}
-  - component: {fileID: 6315459655477391548}
   m_Layer: 0
   m_Name: Furniture
   m_TagString: Untagged
@@ -25534,19 +25565,3 @@ TilemapRenderer:
   m_Mode: 0
   m_DetectChunkCullingBounds: 0
   m_MaskInteraction: 0
---- !u!19719996 &6315459655477391548
-TilemapCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4765470325583230066}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 1
-  m_Offset: {x: 0, y: 0}
-  m_MaximumTileChangeCount: 1000
-  m_ExtrusionFactor: 0.00001
