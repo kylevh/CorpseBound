@@ -10,7 +10,7 @@ public class FratBoy : MonoBehaviour
     #region Mumbo jumbo
     private Animator anim;
     [SerializeField] private List<GameObject> Waypoints;
-    private static Tilemap tilemap;
+    [SerializeField] public Tilemap tilemap;
     private AIPath aiPath;
     private Rigidbody2D rb2d;
     private AIDestinationSetter _aiDestinationSetter;
@@ -21,6 +21,7 @@ public class FratBoy : MonoBehaviour
 
     [SerializeField] private int index;
     [SerializeField] public float moveSpeed = 1f;
+    [SerializeField] public float searchRadius = 1f;
     public float Timer { get; set; }
     private float damageDelay = 0;
 
@@ -60,7 +61,10 @@ public class FratBoy : MonoBehaviour
     {
         if (damageDelay <= 0)
         {
-            collision.gameObject.GetComponent<PlayerController>().takeDamage(30);
+            if (collision.gameObject.tag == "Player")
+            {
+                collision.gameObject.GetComponent<PlayerController>().takeDamage((int)UnityEngine.Random.Range(10, 30));
+            }
             damageDelay = .5f;
         }
     }
@@ -70,7 +74,7 @@ public class FratBoy : MonoBehaviour
         damageDelay -= Time.deltaTime;
 
         if (((transform.position - Waypoints[index].transform.position).sqrMagnitude <
-             1.0f))
+             searchRadius))
         {
             index = (index + 1) % Waypoints.Count;
             _aiDestinationSetter.target = Waypoints[index].transform;

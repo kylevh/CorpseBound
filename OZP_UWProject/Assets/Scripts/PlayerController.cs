@@ -30,6 +30,7 @@ public class PlayerController : MonoBehaviour
     public bool inGhostMode = false;
     public float ghostCooldown = 4f;
     public bool disableMovement = false;
+    public bool attacking = false;
 
     //Objects and sound
     public ParticleSystem runTrail;
@@ -40,6 +41,7 @@ public class PlayerController : MonoBehaviour
 
 
     public float timer;
+    private float damageDelay = 0;
     [HideInInspector] public bool timing = false;
     [HideInInspector] public float clock;
     [HideInInspector] public bool isWhite = false;
@@ -60,16 +62,15 @@ public class PlayerController : MonoBehaviour
         healthMeter.SetMaxHealth(maxHealth);
         healthMeter.SetColor(1);
 
-
         #endregion
         explosionRef = Resources.Load("Explosion");
         corpseBody = Resources.Load("corpse");
         shadow = GameObject.Find("shadow");
-
     }
 
     void Update()
     {
+        damageDelay -= Time.deltaTime;
         if (timer > 0)
         {
             timer -= Time.deltaTime;
@@ -101,6 +102,11 @@ public class PlayerController : MonoBehaviour
 
         DoTheMovementThing();
         healthBarUpdate();
+        setIdleDirection();
+        if (!inGhostMode)
+        {
+            attack();
+        }
     }
 
     void FixedUpdate()
@@ -110,9 +116,8 @@ public class PlayerController : MonoBehaviour
 
     void DoTheMovementThing() //does the movement thing
     {
-        if (!inDialogue())
+        if (!inDialogue() && !attacking)
         {
-
             if (Input.GetKey(KeyCode.LeftShift))
             {
                 if (Mathf.Abs(movement.y) >= 1.1f && Mathf.Abs(movement.x) >= 1.1f) //Clips movement diagonally
@@ -148,7 +153,7 @@ public class PlayerController : MonoBehaviour
             }
 
         }
-        else if (inDialogue())
+        else
         {
             movement.x = 0;
             movement.y = 0;
@@ -213,6 +218,43 @@ public class PlayerController : MonoBehaviour
             return false;
     }
 
+    public void setIdleDirection()
+    {
+        if (!attacking)
+        {
+            if (Input.GetAxisRaw("Horizontal") == 1 || Input.GetAxisRaw("Horizontal") == -1 || Input.GetAxisRaw("Vertical") == 1 || Input.GetAxisRaw("Vertical") == -1)
+            {
+                anim.SetFloat("lastMoveX", Input.GetAxisRaw("Horizontal"));
+                anim.SetFloat("lastMoveY", Input.GetAxisRaw("Vertical"));
+            }
+        }
+    }
+
+    public void attack()
+    {
+        if (Input.GetMouseButtonDown(0) && attacking == false)
+        {
+           // if (damageDelay <= 0)
+           // {
+                if (!inDialogue())
+                {
+                    anim.SetTrigger("attack");
+                    StartCoroutine(attackCo());
+                }
+           // }
+            //damageDelay = .5f;
+        }
+    }
+
+    private IEnumerator attackCo()
+    {
+        attacking = true;
+        yield return null;
+        yield return new WaitForSeconds(.3f);
+        attacking = false;
+        
+    }
+
     private void OnTriggerStay2D(Collider2D collision)
     {
         if(collision.gameObject.tag == "NPC")
@@ -241,6 +283,7 @@ public class PlayerController : MonoBehaviour
         shakira.StartShake(10, .1f);
         audio.takeDamageSound();
     }
+
 
     public void countDownGhost()
     {
@@ -300,7 +343,7 @@ public class PlayerController : MonoBehaviour
 
         else if (inGhostMode == true)
         {
-            if (currentHealth < 2)
+            if (currentHealth < (ghostCooldown * .45))
             {
                 if (clock > .07f)
                 {
