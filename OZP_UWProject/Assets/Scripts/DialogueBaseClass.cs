@@ -17,7 +17,7 @@ namespace DialogueSystem
             {
                 textHolder.text += input[i];
                 if(i % 5 == 0)
-                AudioManager.instance.PlaySound(sound);
+                AudioManager.instance.PlayTalkSound(sound);
                 yield return new WaitForSeconds(delay);
 
             }

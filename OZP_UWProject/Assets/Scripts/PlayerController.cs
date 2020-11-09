@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
     public SwitchCharacter switcheroo;  //On player holder
     public ScreenShakeController shakira; //On player holder
     [SerializeField] public PPVFX vfx; //On Post Processing Object
+    public AudioManager audio;
     Vector2 movement;
     private NPC_Controller npc;
     GameObject GameManager;
@@ -24,6 +25,8 @@ public class PlayerController : MonoBehaviour
     GameObject shadow;
     Vector3 deathPoint;
 
+    //Player stats
+    [HideInInspector]
     public bool inGhostMode = false;
     public float ghostCooldown = 4f;
     public bool disableMovement = false;
@@ -32,11 +35,14 @@ public class PlayerController : MonoBehaviour
     public ParticleSystem dust;
     private UnityEngine.Object explosionRef;
     private UnityEngine.Object corpseBody;
+    
+
+
 
     public float timer;
-    public bool timing = false;
-    public float clock;
-    public bool isWhite = false;
+    [HideInInspector] public bool timing = false;
+    [HideInInspector] public float clock;
+    [HideInInspector] public bool isWhite = false;
 
     private void Awake()
     {
@@ -113,8 +119,8 @@ public class PlayerController : MonoBehaviour
             //Input
             if (Mathf.Abs(movement.y) >= .6f && Mathf.Abs(movement.x) >= .6f) //Clips movement diagonally
             {
-                movement.x = Input.GetAxisRaw("Horizontal") * .6f;
-                movement.y = Input.GetAxisRaw("Vertical") * .6f;
+                movement.x = Input.GetAxisRaw("Horizontal") * .75f;
+                movement.y = Input.GetAxisRaw("Vertical") * .75f;
             }
             else
             {
@@ -146,6 +152,7 @@ public class PlayerController : MonoBehaviour
 
     public void goGhostMode(int check) //if check ==1, go to ghost mode, if 0, exit ghost mode
     {
+        audio.changeMusic();
         if (check == 1) //enter ghost mode
         {
             if (inGhostMode == false)
@@ -216,7 +223,8 @@ public class PlayerController : MonoBehaviour
     {
         currentHealth -= DAMAGE;
         healthMeter.SetHealth(currentHealth);
-
+        shakira.StartShake(10, .1f);
+        audio.takeDamageSound();
     }
 
     public void countDownGhost()
