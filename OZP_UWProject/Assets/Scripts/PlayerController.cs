@@ -32,7 +32,7 @@ public class PlayerController : MonoBehaviour
     public bool disableMovement = false;
 
     //Objects and sound
-    public ParticleSystem dust;
+    public ParticleSystem runTrail;
     private UnityEngine.Object explosionRef;
     private UnityEngine.Object corpseBody;
     
@@ -70,7 +70,6 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-
         if (timer > 0)
         {
             timer -= Time.deltaTime;
@@ -163,7 +162,7 @@ public class PlayerController : MonoBehaviour
 
     void CreateDustTrail()
     {
-        dust.Play();
+        runTrail.Play();
     }
 
     public void goGhostMode(int check) //if check ==1, go to ghost mode, if 0, exit ghost mode
