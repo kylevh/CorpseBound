@@ -22,6 +22,7 @@ public class ScreenShakeController : MonoBehaviour
 
  
 
+
     public void StartShake(float intensity, float length)
     {
         virtualCameraNoise.m_AmplitudeGain = intensity;

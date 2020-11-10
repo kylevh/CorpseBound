@@ -31,6 +31,7 @@ public class PlayerController : MonoBehaviour
     public float ghostCooldown = 4f;
     public bool disableMovement = false;
     public bool attacking = false;
+    public bool stairCaseAnimation = false;
 
     //Objects and sound
     public ParticleSystem runTrail;
@@ -153,13 +154,17 @@ public class PlayerController : MonoBehaviour
             }
 
         }
-        else
+        else if(inDialogue())
         {
             movement.x = 0;
             movement.y = 0;
             anim.SetFloat("Horizontal", movement.x);
             anim.SetFloat("Vertical", movement.y);
             anim.SetFloat("Magnitude", movement.magnitude);
+        }
+        if (disableMovement && stairCaseAnimation)
+        {
+            enterStaircaseAnim();
         }
 
     }
@@ -253,6 +258,18 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(.3f);
         attacking = false;
         
+    }
+
+    void enterStaircaseAnim()
+    {
+        //UITransistions.ui.fadeAnim(2, 5);
+        movement.x = 0;
+        movement.y = 0;
+        anim.SetFloat("Vertical", movement.y);
+        anim.SetFloat("Horizontal", movement.x);
+        anim.SetFloat("Magnitude", movement.magnitude);
+        anim.SetFloat("lastMoveX", Input.GetAxisRaw("Horizontal"));
+        anim.SetFloat("lastMoveY", Input.GetAxisRaw("Vertical"));
     }
 
     private void OnTriggerStay2D(Collider2D collision)
