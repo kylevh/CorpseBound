@@ -97,7 +97,9 @@ public class KeyHolder : MonoBehaviour
                 }
                 keyDoor.OpenDoor();
 
-            }
+            } //opens door if correct key
+
+            
         }
     }
 }

@@ -154,7 +154,7 @@ public class PlayerController : MonoBehaviour
             }
 
         }
-        else if(inDialogue())
+        else if(inDialogue() || attacking)
         {
             movement.x = 0;
             movement.y = 0;
@@ -162,7 +162,7 @@ public class PlayerController : MonoBehaviour
             anim.SetFloat("Vertical", movement.y);
             anim.SetFloat("Magnitude", movement.magnitude);
         }
-        if (disableMovement && stairCaseAnimation)
+        if (disableMovement && stairCaseAnimation && !attacking)
         {
             enterStaircaseAnim();
         }

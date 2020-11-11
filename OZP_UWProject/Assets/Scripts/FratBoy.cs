@@ -22,6 +22,10 @@ public class FratBoy : MonoBehaviour
     [SerializeField] private int index;
     [SerializeField] public float moveSpeed = 1f;
     [SerializeField] public float searchRadius = 1f;
+
+    public EnemyHealthBar healthBar;
+    public float maxHealth;
+    public float currentHealth;
     public float Timer { get; set; }
     private float damageDelay = 0;
 
@@ -38,12 +42,24 @@ public class FratBoy : MonoBehaviour
         }
         _aiDestinationSetter.target = Waypoints[index].transform;
         aiPath.maxSpeed = moveSpeed;
-        transform.position =
-            tilemap.AlignToGrid(transform.position) + new Vector3(0, 0, -0.01f);
+        transform.position = tilemap.AlignToGrid(transform.position) + new Vector3(0, 0, -0.01f);
+        currentHealth = maxHealth;
+        healthBar.SetHealth(currentHealth, maxHealth);
+    }
+
+    public void takeDamage(float damage)
+    {
+        currentHealth -= damage;
+        healthBar.SetHealth(currentHealth, maxHealth);
+        if (currentHealth <= 0)
+        {
+            Destroy(gameObject);
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
+
         _aiDestinationSetter.target = other.gameObject.transform;
     }
 
@@ -54,7 +70,7 @@ public class FratBoy : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        
+
     }
 
     private void OnCollisionStay2D(Collision2D collision)
