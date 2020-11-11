@@ -59,13 +59,14 @@ public class FratBoy : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-
+        if(other.gameObject.tag == "Player")
         _aiDestinationSetter.target = other.gameObject.transform;
     }
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        _aiDestinationSetter.target = Waypoints[index].transform;
+        if (other.gameObject.tag == "Player")
+            _aiDestinationSetter.target = Waypoints[index].transform;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -79,7 +80,7 @@ public class FratBoy : MonoBehaviour
         {
             if (collision.gameObject.tag == "Player")
             {
-                collision.gameObject.GetComponent<PlayerController>().takeDamage((int)UnityEngine.Random.Range(10, 30));
+                collision.gameObject.GetComponent<PlayerController>().takeDamage((int)UnityEngine.Random.Range(51, 70));
             }
             damageDelay = .5f;
         }

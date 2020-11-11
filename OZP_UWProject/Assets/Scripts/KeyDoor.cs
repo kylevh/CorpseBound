@@ -14,5 +14,7 @@ public class KeyDoor : MonoBehaviour
     public void OpenDoor()
     {
         gameObject.SetActive(false);
+        AudioManager.instance.PlayDoorOpen();
+
     }
 }

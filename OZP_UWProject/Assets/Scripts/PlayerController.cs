@@ -1,18 +1,17 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Experimental.SceneManagement;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
     public static PlayerController instance;
     public Animator anim;
+    public Animator ghostAnim;
     public Rigidbody2D rb;
     public SpriteRenderer mainSprite;
     public SwitchCharacter switcheroo;  //On player holder
     public ScreenShakeController shakira; //On player holder
     [SerializeField] public PPVFX vfx; //On Post Processing Object
-    public AudioManager audio;
     Vector2 movement;
     private NPC_Controller npc;
     GameObject GameManager;
@@ -37,6 +36,7 @@ public class PlayerController : MonoBehaviour
     public ParticleSystem runTrail;
     private UnityEngine.Object explosionRef;
     private UnityEngine.Object corpseBody;
+    public GameObject reviveUI;
     
 
 
@@ -50,6 +50,7 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         instance = this;
+        reviveUI.SetActive(false);
     }
 
     void Start()
@@ -134,6 +135,9 @@ public class PlayerController : MonoBehaviour
                 anim.SetFloat("Horizontal", movement.x);
                 anim.SetFloat("Vertical", movement.y);
                 anim.SetFloat("Magnitude", movement.magnitude);
+                ghostAnim.SetFloat("Horizontal", movement.x);
+                ghostAnim.SetFloat("Vertical", movement.y);
+                ghostAnim.SetFloat("Magnitude", movement.magnitude);
                 CreateDustTrail();
             }
             else
@@ -151,6 +155,9 @@ public class PlayerController : MonoBehaviour
                 anim.SetFloat("Horizontal", movement.x);
                 anim.SetFloat("Vertical", movement.y);
                 anim.SetFloat("Magnitude", movement.magnitude);
+                ghostAnim.SetFloat("Horizontal", movement.x);
+                ghostAnim.SetFloat("Vertical", movement.y);
+                ghostAnim.SetFloat("Magnitude", movement.magnitude);
             }
 
         }
@@ -161,6 +168,9 @@ public class PlayerController : MonoBehaviour
             anim.SetFloat("Horizontal", movement.x);
             anim.SetFloat("Vertical", movement.y);
             anim.SetFloat("Magnitude", movement.magnitude);
+            ghostAnim.SetFloat("Horizontal", movement.x);
+            ghostAnim.SetFloat("Vertical", movement.y);
+            ghostAnim.SetFloat("Magnitude", movement.magnitude);
         }
         if (disableMovement && stairCaseAnimation && !attacking)
         {
@@ -177,11 +187,12 @@ public class PlayerController : MonoBehaviour
 
     public void goGhostMode(int check) //if check ==1, go to ghost mode, if 0, exit ghost mode
     {
-        audio.changeMusic();
+        AudioManager.instance.changeMusic();
         if (check == 1) //enter ghost mode
         {
             if (inGhostMode == false)
             {
+                reviveUI.SetActive(true);
                 GameObject explosion = (GameObject)Instantiate(explosionRef);
                 GameObject corpse = (GameObject)Instantiate(corpseBody);
                 explosion.transform.position = new Vector3(transform.position.x, transform.position.y + .1f, transform.position.z);
@@ -200,6 +211,7 @@ public class PlayerController : MonoBehaviour
         if (check == 0)
         {
             inGhostMode = false;
+            reviveUI.SetActive(false);
             switcheroo.switchCharacter(1); //switches to main character
             shakira.StartShake(2f, .1f);
             vfx.exitedGhostMode();
@@ -231,6 +243,8 @@ public class PlayerController : MonoBehaviour
             {
                 anim.SetFloat("lastMoveX", Input.GetAxisRaw("Horizontal"));
                 anim.SetFloat("lastMoveY", Input.GetAxisRaw("Vertical"));
+                ghostAnim.SetFloat("lastMoveX", Input.GetAxisRaw("Horizontal"));
+                ghostAnim.SetFloat("lastMoveY", Input.GetAxisRaw("Vertical"));
             }
         }
     }
@@ -298,7 +312,7 @@ public class PlayerController : MonoBehaviour
         currentHealth -= DAMAGE;
         healthMeter.SetHealth(currentHealth);
         shakira.StartShake(10, .1f);
-        audio.takeDamageSound();
+        AudioManager.instance.takeDamageSound();
     }
 
 

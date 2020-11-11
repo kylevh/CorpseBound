@@ -25,7 +25,6 @@ public class Interactable : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        interactUI.transform.position = Camera.main.WorldToScreenPoint(transform.position + offset);
         if (isInRange && canInteract)
         {
             interactAppear();
@@ -60,8 +59,8 @@ public class Interactable : MonoBehaviour
 
     public void interactAppear()
     {
-        interactUI.GetComponent<Image>().DOFade(1f, .7f);
-        interactUI.GetComponentInChildren<Text>().DOFade(1f, .7f);
+        interactUI.GetComponent<Image>().DOFade(5f, .7f);
+        interactUI.GetComponentInChildren<Text>().DOFade(5f, .7f);
     }
 
     public void interactDissappear()
@@ -70,7 +69,7 @@ public class Interactable : MonoBehaviour
         interactUI.GetComponentInChildren<Text>().DOFade(0f, .7f);
     }
 
-    public void isInteractle()
+    public void isInteractable()
     {
         canInteract = true;
     }

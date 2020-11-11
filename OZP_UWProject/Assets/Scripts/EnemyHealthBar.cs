@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class EnemyHealthBar : MonoBehaviour
 {
     public Slider slider;
+    public GameObject chugchug;
     public Color low;
     public Color high;
     public Vector3 offset;

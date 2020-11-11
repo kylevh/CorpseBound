@@ -13,10 +13,13 @@ public class AudioManager : MonoBehaviour
     public AudioClip ouch1;
     public AudioClip ouch2;
     public AudioClip ouch3;
+    public AudioClip doorSwitch;
+    public AudioClip doorOpen;
     private float time;
 
     private void Awake()
     {
+        
         instance = this;
         source = GetComponent<AudioSource>();
         source.clip = bgm;
@@ -26,6 +29,16 @@ public class AudioManager : MonoBehaviour
     public void PlayTalkSound(AudioClip sound)
     {
         source.PlayOneShot(sound);
+    }
+
+    public void PlayDoorOpen()
+    {
+        source.PlayOneShot(doorOpen);
+    }
+
+    public void PlayLeverSwitch()
+    {
+        source.PlayOneShot(doorSwitch);
     }
 
     public void changeMusic()
