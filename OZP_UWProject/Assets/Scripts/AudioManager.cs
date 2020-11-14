@@ -15,6 +15,7 @@ public class AudioManager : MonoBehaviour
     public AudioClip ouch3;
     public AudioClip doorSwitch;
     public AudioClip doorOpen;
+    public AudioClip hit;
     private float time;
 
     private void Awake()
@@ -29,6 +30,11 @@ public class AudioManager : MonoBehaviour
     public void PlayTalkSound(AudioClip sound)
     {
         source.PlayOneShot(sound);
+    }
+
+    public void enemyHit()
+    {
+        source.PlayOneShot(hit);
     }
 
     public void PlayDoorOpen()

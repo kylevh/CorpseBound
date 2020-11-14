@@ -31,6 +31,8 @@ public class PlayerController : MonoBehaviour
     public bool disableMovement = false;
     public bool attacking = false;
     public bool stairCaseAnimation = false;
+    public bool obtainedSword = false;
+
 
     //Objects and sound
     public ParticleSystem runTrail;
@@ -72,6 +74,7 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+
         damageDelay -= Time.deltaTime;
         if (timer > 0)
         {
@@ -105,7 +108,7 @@ public class PlayerController : MonoBehaviour
         DoTheMovementThing();
         healthBarUpdate();
         setIdleDirection();
-        if (!inGhostMode)
+        if (!inGhostMode & obtainedSword)
         {
             attack();
         }
@@ -202,7 +205,8 @@ public class PlayerController : MonoBehaviour
                 shakira.StartShake(10f, .3f);
                 vfx.enteredGhostMode();
                 GetComponent<BoxCollider2D>().enabled = false;
-                
+                GetComponent<CircleCollider2D>().enabled = false;
+
                 shadow.SetActive(false);
                 deathPoint = new Vector3(transform.position.x, transform.position.y + .1f, transform.position.z); ;
             }
@@ -216,6 +220,7 @@ public class PlayerController : MonoBehaviour
             shakira.StartShake(2f, .1f);
             vfx.exitedGhostMode();
             GetComponent<BoxCollider2D>().enabled = true;
+            GetComponent<CircleCollider2D>().enabled = true;
             shadow.SetActive(true);
             healthMeter.SetMaxHealth(100);
             healthMeter.SetHealth(100);
@@ -253,15 +258,15 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0) && attacking == false)
         {
-           // if (damageDelay <= 0)
-           // {
+            if (damageDelay <= 0)
+            {
                 if (!inDialogue())
                 {
                     anim.SetTrigger("attack");
                     StartCoroutine(attackCo());
                 }
-           // }
-            //damageDelay = .5f;
+            }
+            damageDelay = .3f;
         }
     }
 
@@ -279,7 +284,7 @@ public class PlayerController : MonoBehaviour
         //UITransistions.ui.fadeAnim(2, 5);
         movement.x = 0;
         movement.y = 0;
-        anim.SetFloat("Vertical", movement.y);
+        anim.SetFloat("Vertical", movement.y );
         anim.SetFloat("Horizontal", movement.x);
         anim.SetFloat("Magnitude", movement.magnitude);
         anim.SetFloat("lastMoveX", Input.GetAxisRaw("Horizontal"));

@@ -22,10 +22,10 @@ public class swordHit : MonoBehaviour
         if (other.CompareTag("Fratboy"))
         {
             FratBoy frat = other.GetComponent<FratBoy>();
-            if (damageDelay < 0)
+            if (damageDelay <= 0)
             {
                 frat.takeDamage(15);
-                damageDelay = .5f;
+                damageDelay = .3f;
             }
         }
     }

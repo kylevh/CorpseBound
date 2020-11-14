@@ -15,17 +15,20 @@ namespace DialogueSystem
             {
                 Deactivate();
                 gameObject.SetActive(false);
+                //GameManager.gm.ResumeGame();
             }
         }
 
         private void OnEnable()
         {
+
             dialogueSeq = dialogueSequence();
             StartCoroutine(dialogueSeq);
         }
         private IEnumerator dialogueSequence()
         {
-            if(!dialogueFinished)
+            //GameManager.gm.PauseGame();
+            if (!dialogueFinished)
             {
                 for (int i = 0; i < transform.childCount - 1; i++)
                 {
@@ -46,6 +49,7 @@ namespace DialogueSystem
             dialogueFinished = true;
             yield return new WaitUntil(() => Input.GetMouseButton(0));
             gameObject.SetActive(false);
+            //GameManager.gm.ResumeGame();
         }
 
         private void Deactivate()

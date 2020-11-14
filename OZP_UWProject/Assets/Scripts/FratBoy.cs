@@ -42,7 +42,7 @@ public class FratBoy : MonoBehaviour
         }
         _aiDestinationSetter.target = Waypoints[index].transform;
         aiPath.maxSpeed = moveSpeed;
-        transform.position = tilemap.AlignToGrid(transform.position) + new Vector3(0, 0, -0.01f);
+        transform.position = tilemap.AlignToGrid(transform.position) + new Vector3(0, 0, -0.01f) * Time.deltaTime;
         currentHealth = maxHealth;
         healthBar.SetHealth(currentHealth, maxHealth);
     }
@@ -50,6 +50,7 @@ public class FratBoy : MonoBehaviour
     public void takeDamage(float damage)
     {
         currentHealth -= damage;
+        AudioManager.instance.enemyHit();
         healthBar.SetHealth(currentHealth, maxHealth);
         if (currentHealth <= 0)
         {
@@ -61,6 +62,15 @@ public class FratBoy : MonoBehaviour
     {
         if(other.gameObject.tag == "Player")
         _aiDestinationSetter.target = other.gameObject.transform;
+        if (damageDelay <= 0)
+        {
+            if (other.gameObject.tag == "Player")
+            {
+                other.gameObject.GetComponent<PlayerController>().takeDamage((int)UnityEngine.Random.Range(30, 60));
+                Debug.Log("hit_trigger");
+            }
+            damageDelay = .3f;
+        }
     }
 
     private void OnTriggerExit2D(Collider2D other)
@@ -71,7 +81,15 @@ public class FratBoy : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-
+        if (damageDelay <= 0)
+        {
+            if (collision.gameObject.tag == "Player")
+            {
+                collision.gameObject.GetComponent<PlayerController>().takeDamage((int)UnityEngine.Random.Range(30, 60));
+                Debug.Log("hit_onStay");
+            }
+            damageDelay = .3f;
+        }
     }
 
     private void OnCollisionStay2D(Collision2D collision)
@@ -80,9 +98,10 @@ public class FratBoy : MonoBehaviour
         {
             if (collision.gameObject.tag == "Player")
             {
-                collision.gameObject.GetComponent<PlayerController>().takeDamage((int)UnityEngine.Random.Range(51, 70));
+                collision.gameObject.GetComponent<PlayerController>().takeDamage((int)UnityEngine.Random.Range(30, 60));
+                Debug.Log("hit_onStay");
             }
-            damageDelay = .5f;
+            damageDelay = .3f;
         }
     }
 

@@ -5,6 +5,9 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
+  - enabled: 0
+    path: Assets/Scenes/MAINMENU.unity
+    guid: 070b042e5a90dc34da4540815bdc1c3c
   - enabled: 1
     path: Assets/Scenes/Dorm.unity
     guid: 2cda990e2423bbf4892e6590ba056729

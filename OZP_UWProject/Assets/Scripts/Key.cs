@@ -12,7 +12,8 @@ public class Key : MonoBehaviour
         Green,
         Blue,
         Purple,
-        Yellow
+        Yellow,
+        Sword
     }
 
     public KeyType GetKeyType()

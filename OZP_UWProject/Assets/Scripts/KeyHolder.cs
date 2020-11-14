@@ -11,6 +11,7 @@ public class KeyHolder : MonoBehaviour
     public GameObject purpleKeyUI;
     public GameObject yellowKeyUI;
     public GameObject greenKeyUI;
+    public GameObject swordUI;
 
     private void Awake()
     {
@@ -19,6 +20,7 @@ public class KeyHolder : MonoBehaviour
         purpleKeyUI.SetActive(false);
         yellowKeyUI.SetActive(false);
         greenKeyUI.SetActive(false);
+        swordUI.SetActive(false);
         keyList = new List<Key.KeyType>();
     }
 
@@ -64,6 +66,11 @@ public class KeyHolder : MonoBehaviour
             if (keyPickedUp.GetKeyType() == Key.KeyType.Yellow)
             {
                 yellowKeyUI.SetActive(true);
+            }
+            if (keyPickedUp.GetKeyType() == Key.KeyType.Sword)
+            {
+                swordUI.SetActive(true);
+                PlayerController.instance.obtainedSword = true;
             }
 
         }
