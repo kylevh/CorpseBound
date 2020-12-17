@@ -47,7 +47,7 @@ namespace DialogueSystem
             }
 
             dialogueFinished = true;
-            yield return new WaitUntil(() => Input.GetMouseButton(0));
+            yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.F));
             gameObject.SetActive(false);
             //GameManager.gm.ResumeGame();
         }
